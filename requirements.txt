@@ -1,0 +1,9 @@
+streamlit==1.22.0
+inference_sdk==0.1.1
+Pillow==9.5.0
+numpy==1.24.3
+opencv-python-headless==4.7.0.72
+transformers==4.29.2
+torch==2.0.1
+sentencepiece==0.1.99
+accelerate==0.19.0
