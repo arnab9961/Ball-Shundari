@@ -17,7 +17,7 @@ st.set_page_config(layout="wide")
 
 # Sidebar options
 st.sidebar.title("Ball Shundari Apple Plum Object Detection")
-mode = st.sidebar.radio("Choose Mode", ["Static Image Detection" , "Real-Time Detection"])
+mode = st.sidebar.radio("Choose Mode", ["Static Image Detection", "Real-Time Detection"])
 
 if mode == "Static Image Detection":
     uploaded_file = st.sidebar.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
@@ -37,13 +37,21 @@ if mode == "Static Image Detection":
 
         # Draw bounding boxes on the image
         image_np = np.array(image)
+        detected_objects = 0
+        confidence_sum = 0
+        confidence_levels = []
+
         for detection in result['predictions']:
             if detection['confidence'] >= min_confidence:
+                detected_objects += 1
+                confidence = detection['confidence']
+                confidence_sum += confidence
+                confidence_levels.append(confidence)
+
                 x = int(detection['x'] - detection['width'] / 2)
                 y = int(detection['y'] - detection['height'] / 2)
                 width = int(detection['width'])
                 height = int(detection['height'])
-                confidence = detection['confidence']
                 class_name = detection['class']
 
                 # Draw the bounding box
@@ -59,6 +67,16 @@ if mode == "Static Image Detection":
 
         # Clean up the temporary file
         os.remove(temp_file_path)
+
+        # Add description after annotated image
+        st.write("Detection Summary:")
+        st.write(f"Number of objects detected: {detected_objects}")
+        if detected_objects > 0:
+            avg_confidence = confidence_sum / detected_objects
+            st.write(f"Average confidence level: {avg_confidence:.2f}")
+            st.write(f"Confidence range: {min(confidence_levels):.2f} to {max(confidence_levels):.2f}")
+        else:
+            st.write("No objects were detected in the image.")
 
 else:
     st.markdown("<h2>Real-Time Detection</h2>", unsafe_allow_html=True)
