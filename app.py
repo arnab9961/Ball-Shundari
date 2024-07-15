@@ -16,7 +16,7 @@ CLIENT = InferenceHTTPClient(
 )
 
 # Load Llama 2 model and tokenizer
-model_name = "TheBloke/Llama-2-7B-Chat-GGML"
+model_name = "TheBloke/Llama-2-7B-Chat-GGML/llama-2-7b-chat.ggmlv3.q2_K.bin"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.float16)
 
